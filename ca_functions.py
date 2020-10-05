@@ -10,6 +10,7 @@ def ca_generate(obs):
     pole_angle = [-0.24, -0.12, 0.0, 0.12, 0.24]
     pole_velocity = [-0.1, -0.05, 0.0, 0.05, 0.1]
 
+
     ca_cut = [cart_position, cart_velocity, pole_angle, pole_velocity]
 
     ca_arr_gen = [0] * len(obs) * 6
@@ -30,8 +31,8 @@ def ca_generate(obs):
                 if ca_cut[i][n - 1] <= obs[i] <= ca_cut[i][n]:
                     ca_arr_gen[n + j] = 1
 
-    return ca_arr_gen
 
+    return ca_arr_gen
 
 def map_rule(rule_ids):
     mapped_arr = []
@@ -69,7 +70,7 @@ def converge_ca(initial_board, solution, num_iterations=100):
     board = initial_board
     rows = [board]
 
-    num_iterations = int(num_iterations / len(solution))
+    num_iterations = int(num_iterations/len(solution))
 
     for i in range(num_iterations):
         for rule in solution:
