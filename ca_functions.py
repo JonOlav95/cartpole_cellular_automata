@@ -1,4 +1,7 @@
 from past.builtins import xrange
+import numpy as np
+import matplotlib.pyplot as plt
+import time
 
 
 def ca_generate(obs):
@@ -39,69 +42,80 @@ def ca_generate(obs):
     return ca_arr_gen
 
 
-def rule_to_bin(rule):
-    bin_rule = bin(rule)[2:]
-    missing = 8 - len(bin_rule)
-    bin_rule = "0" * missing + bin_rule
+def map_rule(rule_ids):
+    mapped_arr = []
 
-    bin_rule_arr = []
-    for i in range(len(bin_rule)):
-        bin_rule_arr.append(int(bin_rule[i]))
+    input_patterns = [
+        (1, 1, 1),
+        (1, 1, 0),
+        (1, 0, 1),
+        (1, 0, 0),
+        (0, 1, 1),
+        (0, 1, 0),
+        (0, 0, 1),
+        (0, 0, 0)
+    ]
 
-    return bin_rule_arr
+    for rule_id in rule_ids:
+        outputs = list(map(int, format(rule_id, "#010b")[2:]))
+        mapping = dict(zip(input_patterns, outputs))
+        mapping["name"] = "Rule %d" % (rule_id)
+        mapped_arr.append(mapping)
+
+    return mapped_arr
 
 
-def rules_to_action(ca_arr_n, solution):
-    chromosome = solution.get_chromosome()
+def iterate(board, rule):
+    board = np.pad(board, (1, 1), "constant", constant_values=(0, 0))
+    new_board = np.zeros_like(board)
+    for i in range(1, board.shape[0] - 1):
+        side_step = tuple(board[i - 1:i + 2])
+        new_board[i] = rule[side_step]
+    return new_board[1:-1]
 
-    bin_rule = []
-    for j in range(len(chromosome)):
-        bin_rule.append(rule_to_bin(chromosome[j]))
 
-    next_step = [0] * len(ca_arr_n)
+def converge_ca(initial_board, solution, num_iterations=5):
+    board = initial_board
+    rows = [board]
 
-    for k in range(10):
-        for j in range(len(chromosome)):
+    num_iterations = int(num_iterations/len(solution))
 
-            for n in xrange(len(next_step)):
-                next_step[n] = 0
+    for i in range(num_iterations):
+        for rule in solution:
+            board = iterate(board, rule)
+            rows.append(board)
 
-            for i in range(len(ca_arr_n)):
-                pattern = ""
+    rows = np.array(rows)
+    return rows
 
-                if i == 0:
-                    pattern += str(ca_arr_n[len(ca_arr_n) - 1])
-                else:
-                    pattern += str(ca_arr_n[i - 1])
 
-                pattern += str(ca_arr_n[i])
+def visualize_board(board, title=None):
+    plt.figure(figsize=(5, 2.5))
+    plt.imshow(board, cmap="Greys")
+    plt.axis("off")
+    if title is not None:
+        plt.title(title, fontsize=14)
+    plt.show()
+    plt.close()
 
-                if i == len(ca_arr_n) - 1:
-                    pattern += str(ca_arr_n[0])
-                else:
-                    pattern += str(ca_arr_n[i + 1])
 
-                if pattern == "111":
-                    next_step[i] = bin_rule[j][0]
-                elif pattern == "110":
-                    next_step[i] = bin_rule[j][1]
-                elif pattern == "101":
-                    next_step[i] = bin_rule[j][2]
-                elif pattern == "100":
-                    next_step[i] = bin_rule[j][3]
-                elif pattern == "011":
-                    next_step[i] = bin_rule[j][4]
-                elif pattern == "010":
-                    next_step[i] = bin_rule[j][5]
-                elif pattern == "001":
-                    next_step[i] = bin_rule[j][6]
-                elif pattern == "000":
-                    next_step[i] = bin_rule[j][7]
+# TODO: Change func name
+def generate_action(initial_board, individual):
+    solution = individual.get_chromosome()
 
-            for n in xrange(len(ca_arr_n)):
-                ca_arr_n[n] = next_step[n]
+    mapped = map_rule(solution)
 
-    if sum(ca_arr_n) > len(ca_arr_n) / 2:
+    board_outer = converge_ca(initial_board, mapped)
+
+    '''
+    name = ""
+    for n in mapped:
+        name += (n["name"]) + " "
+
+    visualize_board(board_outer, name)
+    '''
+
+    if sum(board_outer[len(board_outer) - 1]) > len(board_outer[len(board_outer) - 1]) / 2:
         return 1
 
     return 0

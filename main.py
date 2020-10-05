@@ -1,8 +1,7 @@
 import gym
-from ca_functions import *
 from genetic_algorithms import *
-from individual import *
-import time
+from simulation import simulate
+import csv
 
 """ Sequence of the program:
     
@@ -13,32 +12,20 @@ A new population is created by the best performers in the previous population
 """
 
 
-# Generate the initial population before the simulation begins
-def initial_population():
-    chromosomes = []
+def store_data(pop, gen, rew):
+    pop = sorted(pop, key=lambda x: x.reward, reverse=True)
 
-    for j in range(100):
+    filename = "data/" + str(gen) + "_" + str(rew) + ".txt"
 
-        # Choose the length of the chromosome at random
-        sequence_size = random.randint(2, 5)
+    with open(filename, mode="w") as file:
+        file.write("Generation: " + str(gen) + "\tTotal Reward: " + str(rew) + "\n")
 
-        chromosome = Individual(length=sequence_size)
-
-        for i in range(sequence_size):
-            # Choose the genes in the chromosome at random
-            gene = random.randint(0, 255)
-            chromosome.append_gene(gene)
-
-        chromosomes.append(chromosome)
-
-    return chromosomes
-
+        for s in pop:
+            file.write("Reward: " + str(s.reward) + "   \tchromosome: " + str(s.get_chromosome()) + "\n")
 
 if __name__ == '__main__':
 
     env = gym.make("CartPole-v1")
-    observation = env.reset()
-
     population = initial_population()
 
     # Run the simulation for 1000 generations (steps)
@@ -49,36 +36,11 @@ if __name__ == '__main__':
 
         # Run each solution in the population until it is done
         for solution in population:
-
-            # Used to calculate the individual reward of each potential solution
-            solution_reward = 0
-
-            while True:
-
-                # Activate rendering after 500 generations
-                if generation > 50:
-                    env.render()
-
-
-                # Create a cellular automata array from the observation
-                ca_arr = ca_generate(observation)
-
-                # Apply the solutions rules to the cellular automata and return an action
-                action = rules_to_action(ca_arr, solution)
-
-                observation, reward, done, info = env.step(action)
-                solution_reward += reward
-
-                if done:
-                    observation = env.reset()
-                    break
-
-
-            solution.set_reward(solution_reward)
-            total_reward += solution_reward
+            reward = simulate(env, solution)
+            total_reward += reward
 
         # Generate a new population by using genetic algorithms
-
+        store_data(population, generation, total_reward)
         population = generate(population)
 
         print("generation: ", str(generation))

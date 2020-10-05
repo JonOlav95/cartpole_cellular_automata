@@ -1,5 +1,4 @@
 class Individual:
-
     """ An individual is also referred to as a "solution".
 
     A individual consists of a chromosome. A chromosome consists
@@ -10,8 +9,7 @@ class Individual:
     """
 
     def __init__(self, length=0):
-
-        self.__chromosome = []
+        self.chromosome = []
         self.reward = 0
         self.length = length
         self.parent_times = 0
@@ -20,10 +18,10 @@ class Individual:
         self.reward = reward
 
     def append_gene(self, gene):
-        self.__chromosome.append(gene)
+        self.chromosome.append(gene)
 
     def get_chromosome(self):
-        return self.__chromosome
+        return self.chromosome
 
     def set_chromosome(self, chromosome):
-        self.__chromosome = chromosome
+        self.chromosome = chromosome
