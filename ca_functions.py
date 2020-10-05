@@ -93,7 +93,7 @@ def visualize_board(board, title=None):
 # TODO: Change func name
 def generate_action(initial_board, individual):
     solution = individual.get_chromosome()
-    
+
     mapped = map_rule(solution)
 
     board_outer = converge_ca(initial_board, mapped)
