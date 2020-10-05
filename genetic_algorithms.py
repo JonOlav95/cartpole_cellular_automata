@@ -132,7 +132,7 @@ def generate(population):
         parent_2 = choice(population_copy)
         population_copy.remove(parent_2)
 
-        c = one_point_crossover_2(parent_1.get_chromosome(), parent_2.get_chromosome())
+        c = one_point_crossover(parent_1.get_chromosome(), parent_2.get_chromosome())
         c = mutate(c)
 
         child = Individual(length=len(c))

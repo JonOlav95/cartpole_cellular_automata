@@ -12,32 +12,23 @@ def ca_generate(obs):
 
     ca_cut = [cart_position, cart_velocity, pole_angle, pole_velocity]
 
-    repeat = 4
-    obs_space = len(cart_position) + 1
-    zero_space = 5
-    pattern_length = (len(obs) * obs_space) + ((len(obs) - 1) * zero_space)
-    ca_arr_gen = [0] * pattern_length * repeat
+    ca_arr_gen = [0] * len(obs) * 6
 
-    for n in range(0, repeat):
-        for i in range(0, len(obs)):
+    for i in range(0, len(obs)):
 
-            j = i * (obs_space + zero_space) + (n * pattern_length)
+        j = i * 6
 
-            if obs[i] <= ca_cut[i][0]:
-                ca_arr_gen[j] = 1
+        if obs[i] <= ca_cut[i][0]:
+            ca_arr_gen[j] = 1
 
-            elif obs[i] >= ca_cut[i][len(ca_cut[i]) - 1]:
-                ca_arr_gen[j + 5] = 1
+        elif obs[i] >= ca_cut[i][len(ca_cut[i]) - 1]:
+            ca_arr_gen[j + 5] = 1
 
-            else:
-                for k in range(1, 5):
+        else:
+            for n in range(1, 5):
 
-                    if ca_cut[i][k - 1] <= obs[i] <= ca_cut[i][k]:
-                        ca_arr_gen[k + j] = 1
-
-            if n != repeat - 1 and i != len(obs) - 1:
-                for k in range(0, zero_space):
-                    ca_arr_gen[j + obs_space + k] = 0
+                if ca_cut[i][n - 1] <= obs[i] <= ca_cut[i][n]:
+                    ca_arr_gen[n + j] = 1
 
     return ca_arr_gen
 
@@ -74,11 +65,11 @@ def iterate(board, rule):
     return new_board[1:-1]
 
 
-def converge_ca(initial_board, solution, num_iterations=5):
+def converge_ca(initial_board, solution, num_iterations=100):
     board = initial_board
     rows = [board]
 
-    num_iterations = int(num_iterations/len(solution))
+    num_iterations = int(num_iterations / len(solution))
 
     for i in range(num_iterations):
         for rule in solution:
@@ -102,7 +93,7 @@ def visualize_board(board, title=None):
 # TODO: Change func name
 def generate_action(initial_board, individual):
     solution = individual.get_chromosome()
-
+    
     mapped = map_rule(solution)
 
     board_outer = converge_ca(initial_board, mapped)

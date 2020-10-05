@@ -23,6 +23,7 @@ def store_data(pop, gen, rew):
         for s in pop:
             file.write("Reward: " + str(s.reward) + "   \tchromosome: " + str(s.get_chromosome()) + "\n")
 
+
 if __name__ == '__main__':
 
     env = gym.make("CartPole-v1")

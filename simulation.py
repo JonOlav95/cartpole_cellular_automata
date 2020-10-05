@@ -1,12 +1,15 @@
 from ca_functions import ca_generate, generate_action
 
 
+# Runs the simulation once given a solution used to calculate the actions
 def simulate(env, solution):
 
     solution_reward = 0
     observation = env.reset()
 
     while True:
+
+        env.render()
 
         # Create a cellular automata array from the observation
         ca_arr = ca_generate(observation)
