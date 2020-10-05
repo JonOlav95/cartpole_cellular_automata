@@ -2,6 +2,7 @@ import gym
 from ca_functions import *
 from genetic_algorithms import *
 from individual import *
+import time
 
 """ Sequence of the program:
     
@@ -19,7 +20,7 @@ def initial_population():
     for j in range(100):
 
         # Choose the length of the chromosome at random
-        sequence_size = random.randint(1, 5)
+        sequence_size = random.randint(2, 5)
 
         chromosome = Individual(length=sequence_size)
 
@@ -55,8 +56,9 @@ if __name__ == '__main__':
             while True:
 
                 # Activate rendering after 500 generations
-                if generation > 500:
+                if generation > 50:
                     env.render()
+
 
                 # Create a cellular automata array from the observation
                 ca_arr = ca_generate(observation)
@@ -71,13 +73,15 @@ if __name__ == '__main__':
                     observation = env.reset()
                     break
 
+
             solution.set_reward(solution_reward)
             total_reward += solution_reward
 
         # Generate a new population by using genetic algorithms
+
         population = generate(population)
 
+        print("generation: ", str(generation))
         print("sum rewards: ", str(total_reward))
-        print("tot: ", str(len(population)))
 
     env.close()
