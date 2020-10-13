@@ -16,7 +16,7 @@ A new population is created by the best performers in the previous population
 def store_data(pop, gen, rew):
     pop = sorted(pop, key=lambda x: x.reward, reverse=True)
 
-    filename = "data_2/" + str(gen) + "_" + str(rew) + ".txt"
+    filename = "data/" + str(gen) + "_" + str(rew) + ".txt"
 
     with open(filename, mode="w") as file:
         file.write("Generation: " + str(gen) + "\tTotal Reward: " + str(rew) + "\n")

@@ -3,7 +3,6 @@ import random
 from random import choice
 from individual import Individual
 
-
 # Generate the initial population before the simulation begins
 from mutation import mutate
 
@@ -15,7 +14,7 @@ def initial_population():
     for j in range(100):
 
         # Choose the length of the chromosome at random
-        sequence_size = random.randint(2, 5)
+        sequence_size = random.randint(1, 5)
 
         chromosome = Individual(length=sequence_size)
 
@@ -27,6 +26,57 @@ def initial_population():
         chromosomes.append(chromosome)
 
     return chromosomes
+
+
+def uniform_crossover(parent_1, parent_2):
+    child_1 = []
+    child_2 = []
+
+    total_len = len(parent_1) + len(parent_2)
+
+    if total_len % 2 != 0:
+        child_1_len = int((total_len / 2) + 1)
+        child_2_len = int(total_len / 2)
+    else:
+        child_1_len = total_len / 2
+        child_2_len = total_len / 2
+
+    for gene in parent_1:
+        if len(child_1) >= child_1_len:
+            child_2.append(gene)
+            continue
+
+        if len(child_2) >= child_2_len:
+            child_1.append(gene)
+            continue
+
+        flip = random.randint(0, 1)
+        if flip == 0:
+            child_1.append(gene)
+
+        elif flip == 1:
+            child_2.append(gene)
+
+    for gene in parent_2:
+        if len(child_1) >= child_1_len:
+            child_2.append(gene)
+            continue
+
+        if len(child_2) >= child_2_len:
+            child_1.append(gene)
+            continue
+
+        flip = random.randint(0, 1)
+        if flip == 0:
+            child_1.append(gene)
+
+        elif flip == 1:
+            child_2.append(gene)
+
+    if len(child_2) == 0 or len(child_1) == 0:
+        print("wtf")
+
+    return child_1, child_2
 
 
 def one_point_crossover(parent_1, parent_2):
@@ -118,11 +168,13 @@ def generate(population):
 
     # Sort the population to find out which had the best performance
     population = sorted(population, key=lambda x: x.reward, reverse=True)
-    total_remove = 40
+    total_remove = 50
+    total_parents = 50
 
-    new_population = population[:70]
+    # Elitism
+    new_population = population[:(len(population) - total_remove)]
 
-    population = population[:(len(population) - total_remove)]
+    population = population[:(len(population) - total_parents)]
 
     population_copy = copy.copy(population)
 
@@ -133,12 +185,17 @@ def generate(population):
         parent_2 = choice(population_copy)
         population_copy.remove(parent_2)
 
-        c = one_point_crossover(parent_1.get_chromosome(), parent_2.get_chromosome())
-        c = mutate(c)
+        c1, c2 = uniform_crossover(parent_1.get_chromosome(), parent_2.get_chromosome())
+        c1 = mutate(c1)
+        c2 = mutate(c2)
 
-        child = Individual(length=len(c))
-        child.set_chromosome(c)
+        child_1 = Individual(length=len(c1))
+        child_1.set_chromosome(c1)
 
-        new_population.append(child)
+        child_2 = Individual(length=len(c2))
+        child_2.set_chromosome(c2)
+
+        new_population.append(child_1)
+        new_population.append(child_2)
 
     return new_population

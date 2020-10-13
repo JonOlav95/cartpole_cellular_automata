@@ -11,11 +11,19 @@ def ca_generate(obs):
 
     ca_cut = [cart_position, cart_velocity, pole_angle, pole_velocity]
 
-    ca_arr_gen = [0] * len(obs) * 6
+    filler_len = 10
+    ca_arr_gen = [0] * (len(obs) * 6 + ((len(obs) - 1) * filler_len))
+
+    j = 0
 
     for i in range(0, len(obs)):
 
-        j = i * 6
+        if i != 0:
+            j = (i - 1) * (filler_len + 6) + 6
+            for n in range(filler_len):
+                ca_arr_gen[j + n] = 0
+
+        j = i * (filler_len + 6)
 
         if obs[i] <= ca_cut[i][0]:
             ca_arr_gen[j] = 1
@@ -28,6 +36,8 @@ def ca_generate(obs):
 
                 if ca_cut[i][n - 1] <= obs[i] <= ca_cut[i][n]:
                     ca_arr_gen[n + j] = 1
+                    break
+
 
     return ca_arr_gen
 

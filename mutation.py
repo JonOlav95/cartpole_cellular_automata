@@ -19,7 +19,7 @@ def remove_gene(child):
 def modify_gene(child):
     m = random.randint(0, len(child) - 1)
     child[m] = random.randint(0, 255)
-    
+
 
 # The individual has a chance of being mutated in three different ways
 def mutate(child):
@@ -30,7 +30,7 @@ def mutate(child):
     if len(child) == 5:
         v_mutation = random.randint(1, 2)
 
-    elif len(child) == 2:
+    elif len(child) == 1:
         v_mutation = random.randint(0, 1)
 
     else:
