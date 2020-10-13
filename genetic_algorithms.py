@@ -8,6 +8,7 @@ from individual import Individual
 from mutation import mutate
 
 
+# Creates an initial population with random genes
 def initial_population():
     chromosomes = []
 

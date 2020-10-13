@@ -1,6 +1,7 @@
 import random
 
 
+# Adds a random gene to the individuals chromosome
 def add_gene(child):
     index = random.randint(0, len(child))
     gene = random.randint(0, 255)
@@ -8,28 +9,19 @@ def add_gene(child):
     child.insert(index, gene)
 
 
+# Removes a random gene from the individual chromosome
 def remove_gene(child):
     index = random.randint(0, len(child) - 1)
     child.pop(index)
 
 
+# Modify a random gene in the individuals chromosome
 def modify_gene(child):
     m = random.randint(0, len(child) - 1)
-    dc = random.randint(1, 10)
-    way = random.randint(0, 1)
+    child[m] = random.randint(0, 255)
+    
 
-    if way == 1:
-        if child[m] > 255 - dc:
-            child[m] -= dc
-        else:
-            child[m] += dc
-    else:
-        if child[m] < dc:
-            child[m] += dc
-        else:
-            child[m] -= dc
-
-
+# The individual has a chance of being mutated in three different ways
 def mutate(child):
     mutate_chance = random.randint(0, 4)
     if mutate_chance != 0:

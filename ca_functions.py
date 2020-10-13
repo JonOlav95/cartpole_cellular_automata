@@ -1,7 +1,6 @@
 from past.builtins import xrange
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 
 
 def ca_generate(obs):
@@ -9,7 +8,6 @@ def ca_generate(obs):
     cart_velocity = [-0.1, -0.05, 0.0, 0.05, 0.1]
     pole_angle = [-0.24, -0.12, 0.0, 0.12, 0.24]
     pole_velocity = [-0.1, -0.05, 0.0, 0.05, 0.1]
-
 
     ca_cut = [cart_position, cart_velocity, pole_angle, pole_velocity]
 
@@ -31,8 +29,8 @@ def ca_generate(obs):
                 if ca_cut[i][n - 1] <= obs[i] <= ca_cut[i][n]:
                     ca_arr_gen[n + j] = 1
 
-
     return ca_arr_gen
+
 
 def map_rule(rule_ids):
     mapped_arr = []
@@ -60,9 +58,11 @@ def map_rule(rule_ids):
 def iterate(board, rule):
     board = np.pad(board, (1, 1), "constant", constant_values=(0, 0))
     new_board = np.zeros_like(board)
+
     for i in range(1, board.shape[0] - 1):
         side_step = tuple(board[i - 1:i + 2])
         new_board[i] = rule[side_step]
+
     return new_board[1:-1]
 
 
@@ -70,7 +70,7 @@ def converge_ca(initial_board, solution, num_iterations=100):
     board = initial_board
     rows = [board]
 
-    num_iterations = int(num_iterations/len(solution))
+    num_iterations = int(num_iterations / len(solution))
 
     for i in range(num_iterations):
         for rule in solution:
@@ -81,12 +81,15 @@ def converge_ca(initial_board, solution, num_iterations=100):
     return rows
 
 
+# Function can be used to visualize the CA board
 def visualize_board(board, title=None):
     plt.figure(figsize=(5, 2.5))
     plt.imshow(board, cmap="Greys")
     plt.axis("off")
+
     if title is not None:
         plt.title(title, fontsize=14)
+
     plt.show()
     plt.close()
 
