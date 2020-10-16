@@ -27,7 +27,7 @@ def store_data(pop, gen, rew):
 
 if __name__ == '__main__':
 
-    env = gym.make("CartPole-v1")
+    env = gym.make("CartPole-v2")
     population = initial_population()
 
     # Run the simulation for 1000 generations (steps)

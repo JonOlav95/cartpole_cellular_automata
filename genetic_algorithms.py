@@ -2,6 +2,7 @@ import copy
 import random
 from random import choice
 from individual import Individual
+import numpy.random as npr
 
 # Generate the initial population before the simulation begins
 from mutation import mutate
@@ -28,7 +29,21 @@ def initial_population():
     return chromosomes
 
 
+def random_individual():
+    size = random.randint(2, 5)
+    chromosome = []
+
+    for i in range(size):
+        gene = random.randint(0, 255)
+        chromosome.append(gene)
+
+    return chromosome
+
+
 def uniform_crossover_2(parent_1, parent_2):
+
+    if parent_1 == parent_2:
+        return random_individual(), random_individual()
 
     child_1 = [0] * len(parent_1)
     child_2 = [0] * len(parent_2)
@@ -199,22 +214,18 @@ def generate(population):
 
     # Sort the population to find out which had the best performance
     population = sorted(population, key=lambda x: x.reward, reverse=True)
-    total_remove = 50
-    total_parents = 50
+    total_remove = 90
 
     # Elitism
     new_population = population[:(len(population) - total_remove)]
 
-    population = population[:(len(population) - total_parents)]
+    max_reward = sum([c.reward for c in population])
+    selection_probs = [c.reward/max_reward for c in population]
 
-    population_copy = copy.copy(population)
+    for i in range(int(total_remove/2)):
 
-    for i in range(int(len(population_copy) / 2)):
-        parent_1 = choice(population_copy)
-        population_copy.remove(parent_1)
-
-        parent_2 = choice(population_copy)
-        population_copy.remove(parent_2)
+        parent_1 = population[npr.choice(len(population), p=selection_probs)]
+        parent_2 = population[npr.choice(len(population), p=selection_probs)]
 
         c1, c2 = uniform_crossover_2(parent_1.get_chromosome(), parent_2.get_chromosome())
         c1 = mutate(c1)
@@ -228,5 +239,7 @@ def generate(population):
 
         new_population.append(child_1)
         new_population.append(child_2)
+
+
 
     return new_population
