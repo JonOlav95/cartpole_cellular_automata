@@ -30,7 +30,7 @@ def mutate(child):
     if len(child) == 5:
         v_mutation = random.randint(1, 2)
 
-    elif len(child) == 1:
+    elif len(child) == 2:
         v_mutation = random.randint(0, 1)
 
     else:

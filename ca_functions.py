@@ -59,7 +59,7 @@ def map_rule(rule_ids):
     for rule_id in rule_ids:
         outputs = list(map(int, format(rule_id, "#010b")[2:]))
         mapping = dict(zip(input_patterns, outputs))
-        mapping["name"] = "Rule %d" % (rule_id)
+        mapping["name"] = "Rule %d" % rule_id
         mapped_arr.append(mapping)
 
     return mapped_arr

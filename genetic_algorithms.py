@@ -14,7 +14,7 @@ def initial_population():
     for j in range(100):
 
         # Choose the length of the chromosome at random
-        sequence_size = random.randint(1, 5)
+        sequence_size = random.randint(2, 5)
 
         chromosome = Individual(length=sequence_size)
 
@@ -26,6 +26,37 @@ def initial_population():
         chromosomes.append(chromosome)
 
     return chromosomes
+
+
+def uniform_crossover_2(parent_1, parent_2):
+
+    child_1 = [0] * len(parent_1)
+    child_2 = [0] * len(parent_2)
+
+    if len(parent_1) > len(parent_2):
+        longest = len(parent_1)
+        shortest = len(parent_2)
+    else:
+        longest = len(parent_2)
+        shortest = len(parent_1)
+
+    for i in range(shortest):
+        flip = random.randint(0, 1)
+
+        if flip == 1:
+            child_1[i] = parent_1[i]
+            child_2[i] = parent_2[i]
+        else:
+            child_1[i] = parent_2[i]
+            child_2[i] = parent_1[i]
+
+    for i in range(shortest, longest):
+        if len(parent_1) > len(parent_2):
+            child_1[i] = parent_1[i]
+        else:
+            child_2[i] = parent_2[i]
+
+    return child_1, child_2
 
 
 def uniform_crossover(parent_1, parent_2):
@@ -185,7 +216,7 @@ def generate(population):
         parent_2 = choice(population_copy)
         population_copy.remove(parent_2)
 
-        c1, c2 = uniform_crossover(parent_1.get_chromosome(), parent_2.get_chromosome())
+        c1, c2 = uniform_crossover_2(parent_1.get_chromosome(), parent_2.get_chromosome())
         c1 = mutate(c1)
         c2 = mutate(c2)
 
