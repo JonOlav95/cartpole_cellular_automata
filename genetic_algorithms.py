@@ -47,7 +47,21 @@ def random_individual():
     return chromosome
 
 
+def random_ca_cut():
+    ca_cut = [0.0] * 4
+    ca_cut[0] = random.randint(0, 80) / 100
+    ca_cut[1] = random.randint(0, 200) / 100
+    ca_cut[2] = random.randint(0, 24) / 100
+    ca_cut[3] = random.randint(0, 300) / 100
+
+    return ca_cut
+
+
 def uniform_crossover_ca(ca_1, ca_2):
+
+    if ca_1 == ca_2:
+        return random_ca_cut(), random_ca_cut()
+
     child_1 = [0] * 4
     child_2 = [0] * 4
 
