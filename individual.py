@@ -10,6 +10,7 @@ class Individual:
 
     def __init__(self, length=0):
         self.chromosome = []
+        self.chromosome_ca = []
         self.reward = 0
         self.length = length
         self.parent_times = 0

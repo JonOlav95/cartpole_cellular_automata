@@ -3,41 +3,47 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def ca_generate(obs):
-    cart_position = [-0.05, -0.02, 0.0, 0.02, 0.05]
-    cart_velocity = [-0.1, -0.05, 0.0, 0.05, 0.1]
-    pole_angle = [-0.24, -0.12, 0.0, 0.12, 0.24]
-    pole_velocity = [-0.1, -0.05, 0.0, 0.05, 0.1]
+def ca_generate(obs, ca_range):
+
+    cart_position = []
+    cart_velocity = []
+    pole_angle = []
+    pole_velocity = []
+
+    for i in range(-3, 3):
+        cart_position.append(ca_range[0] * i)
+        cart_velocity.append(ca_range[1] * i)
+        pole_angle.append(ca_range[2] * i)
+        pole_velocity.append(ca_range[3] * i)
 
     ca_cut = [cart_position, cart_velocity, pole_angle, pole_velocity]
 
     filler_len = 10
-    ca_arr_gen = [0] * (len(obs) * 6 + ((len(obs) - 1) * filler_len))
+    ca_arr_gen = [0] * (len(obs) * 8 + ((len(obs) - 1) * filler_len))
 
     j = 0
 
     for i in range(0, len(obs)):
 
         if i != 0:
-            j = (i - 1) * (filler_len + 6) + 6
+            j = (i - 1) * (filler_len + 8) + 8
             for n in range(filler_len):
                 ca_arr_gen[j + n] = 0
 
-        j = i * (filler_len + 6)
+        j = i * (filler_len + 8)
 
         if obs[i] <= ca_cut[i][0]:
             ca_arr_gen[j] = 1
 
         elif obs[i] >= ca_cut[i][len(ca_cut[i]) - 1]:
-            ca_arr_gen[j + 5] = 1
+            ca_arr_gen[j + 7] = 1
 
         else:
-            for n in range(1, 5):
+            for n in range(1, 7):
 
                 if ca_cut[i][n - 1] <= obs[i] <= ca_cut[i][n]:
                     ca_arr_gen[n + j] = 1
                     break
-
 
     return ca_arr_gen
 

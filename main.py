@@ -22,12 +22,18 @@ def store_data(pop, gen, rew):
         file.write("Generation: " + str(gen) + "\tTotal Reward: " + str(rew) + "\n")
 
         for s in pop:
-            file.write("Reward: " + str(s.reward) + "   \tchromosome: " + str(s.get_chromosome()) + "\n")
+            length = len(str(s.chromosome))
+            file.write("Reward: " + str(s.reward) + "   \tchromosome: " + str(s.get_chromosome()))
+
+            for i in range(30 - length):
+                file.write(" ")
+
+            file.write(str(s.chromosome_ca) + "\n")
 
 
 if __name__ == '__main__':
 
-    env = gym.make("CartPole-v2")
+    env = gym.make("CartPole-v1")
     population = initial_population()
 
     # Run the simulation for 1000 generations (steps)

@@ -10,7 +10,7 @@ def simulate(env, solution):
     while True:
 
         # Create a cellular automata array from the observation
-        ca_arr = ca_generate(observation)
+        ca_arr = ca_generate(observation, solution.chromosome_ca)
 
         # Apply the solutions rules to the cellular automata and return an action
         action = generate_action(ca_arr, solution)
