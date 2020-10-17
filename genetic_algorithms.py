@@ -26,11 +26,11 @@ def initial_population():
             gene = random.randint(0, 255)
             individual.chromosome.append(gene)
 
-        individual.chromosome_ca.append(random.randint(0, 80) / 100)
-        individual.chromosome_ca.append(random.randint(0, 200) / 100)
-        individual.chromosome_ca.append(random.randint(0, 24) / 100)
-        individual.chromosome_ca.append(random.randint(0, 300) / 100)
-
+        ca_cut = random_ca_cut()
+        individual.chromosome_ca.append(ca_cut[0])
+        individual.chromosome_ca.append(ca_cut[1])
+        individual.chromosome_ca.append(ca_cut[2])
+        individual.chromosome_ca.append(ca_cut[3])
         individuals.append(individual)
 
     return individuals
@@ -49,18 +49,15 @@ def random_individual():
 
 def random_ca_cut():
     ca_cut = [0.0] * 4
-    ca_cut[0] = random.randint(0, 80) / 100
-    ca_cut[1] = random.randint(0, 200) / 100
-    ca_cut[2] = random.randint(0, 24) / 100
-    ca_cut[3] = random.randint(0, 300) / 100
+    ca_cut[0] = random.randint(1, 800) / 1000
+    ca_cut[1] = random.randint(1, 2000) / 1000
+    ca_cut[2] = random.randint(1, 240) / 1000
+    ca_cut[3] = random.randint(1, 3000) / 1000
 
     return ca_cut
 
 
 def uniform_crossover_ca(ca_1, ca_2):
-
-    if ca_1 == ca_2:
-        return random_ca_cut(), random_ca_cut()
 
     child_1 = [0] * 4
     child_2 = [0] * 4
@@ -79,8 +76,27 @@ def uniform_crossover_ca(ca_1, ca_2):
 
 
 def uniform_crossover_2(parent_1, parent_2):
-    if parent_1 == parent_2:
-        return random_individual(), random_individual()
+
+    if parent_1.chromosome == parent_2.chromosome and parent_1.reward != 500 and parent_2.reward != 500:
+        chromosome_1 = random_individual()
+        chromosome_2 = random_individual()
+
+        individual_1 = Individual(len(chromosome_1))
+        individual_2 = Individual(len(chromosome_2))
+
+        individual_1.chromosome = chromosome_1
+        individual_2.chromosome = chromosome_2
+
+        individual_1.chromosome_ca = random_ca_cut()
+        individual_2.chromosome_ca = random_ca_cut()
+
+        return individual_1, individual_2
+
+    child_1_ca = parent_1.chromosome_ca
+    child_2_ca = parent_2.chromosome_ca
+
+    parent_1 = parent_1.chromosome
+    parent_2 = parent_2.chromosome
 
     child_1 = [0] * len(parent_1)
     child_2 = [0] * len(parent_2)
@@ -108,10 +124,41 @@ def uniform_crossover_2(parent_1, parent_2):
         else:
             child_2[i] = parent_2[i]
 
-    return child_1, child_2
+    individual_1 = Individual(len(child_1))
+    individual_2 = Individual(len(child_2))
+
+    individual_1.chromosome = child_1
+    individual_2.chromosome = child_2
+
+    individual_1.chromosome_ca = child_1_ca
+    individual_2.chromosome_ca = child_2_ca
+
+    return individual_1, individual_2
 
 
 def uniform_crossover(parent_1, parent_2):
+
+    if parent_1.chromosome == parent_2.chromosome and parent_1.reward != 500 and parent_2.reward != 500:
+        chromosome_1 = random_individual()
+        chromosome_2 = random_individual()
+
+        individual_1 = Individual(len(chromosome_1))
+        individual_2 = Individual(len(chromosome_2))
+
+        individual_1.chromosome = chromosome_1
+        individual_2.chromosome = chromosome_2
+
+        individual_1.chromosome_ca = random_ca_cut()
+        individual_2.chromosome_ca = random_ca_cut()
+
+        return individual_1, individual_2
+
+    child_1_ca = parent_1.chromosome_ca
+    child_2_ca = parent_2.chromosome_ca
+
+    parent_1 = parent_1.chromosome
+    parent_2 = parent_2.chromosome
+
     child_1 = []
     child_2 = []
 
@@ -156,10 +203,17 @@ def uniform_crossover(parent_1, parent_2):
         elif flip == 1:
             child_2.append(gene)
 
-    if len(child_2) == 0 or len(child_1) == 0:
-        print("wtf")
+    individual_1 = Individual(len(child_1))
+    individual_2 = Individual(len(child_2))
 
-    return child_1, child_2
+    individual_1.chromosome = child_1
+    individual_2.chromosome = child_2
+
+    individual_1.chromosome_ca = child_1_ca
+    individual_2.chromosome_ca = child_2_ca
+
+    return individual_1, individual_2
+
 
 
 def one_point_crossover(parent_1, parent_2):
@@ -251,7 +305,7 @@ def generate(population):
 
     # Sort the population to find out which had the best performance
     population = sorted(population, key=lambda x: x.reward, reverse=True)
-    total_remove = 90
+    total_remove = 95
 
     # Elitism
     new_population = population[:(len(population) - total_remove)]
@@ -260,26 +314,26 @@ def generate(population):
     selection_probs = [c.reward / max_reward for c in population]
 
     for i in range(int(total_remove / 2)):
-        parent_1 = population[npr.choice(len(population), p=selection_probs)]
-        parent_2 = population[npr.choice(len(population), p=selection_probs)]
+        parent_1 = None
+        parent_2 = None
 
-        c1, c2 = uniform_crossover_2(parent_1.get_chromosome(), parent_2.get_chromosome())
-        ca_1, ca_2 = uniform_crossover_ca(parent_1.chromosome_ca, parent_2.chromosome_ca)
-        c1 = mutate(c1)
-        c2 = mutate(c2)
+        while parent_1 == parent_2:
+            parent_1 = population[npr.choice(len(population), p=selection_probs)]
+            parent_2 = population[npr.choice(len(population), p=selection_probs)]
+
+        c1, c2 = uniform_crossover(parent_1, parent_2)
+        ca_1, ca_2 = uniform_crossover_ca(c1.chromosome_ca, c2.chromosome_ca)
+
+        c1.chromosome = mutate(c1.chromosome)
+        c2.chromosome = mutate(c2.chromosome)
 
         ca_1 = ca_mutate(ca_1)
         ca_2 = ca_mutate(ca_2)
 
-        child_1 = Individual(length=len(c1))
-        child_1.chromosome_ca = ca_1
-        child_1.set_chromosome(c1)
+        c1.chromosome_ca = ca_1
+        c2.chromosome_ca = ca_2
 
-        child_2 = Individual(length=len(c2))
-        child_2.chromosome_ca = ca_2
-        child_2.set_chromosome(c2)
-
-        new_population.append(child_1)
-        new_population.append(child_2)
+        new_population.append(c1)
+        new_population.append(c2)
 
     return new_population
