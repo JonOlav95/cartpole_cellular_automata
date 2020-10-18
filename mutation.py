@@ -23,7 +23,7 @@ def modify_gene(child):
 
 # The individual has a chance of being mutated in three different ways
 def mutate(child):
-    mutate_chance = random.randint(0, 20)
+    mutate_chance = random.randint(0, 10)
     if mutate_chance != 0:
         return child
 
@@ -50,7 +50,7 @@ def mutate(child):
 
 # Mutation of the ca chromosome
 def ca_mutate(ca_cut):
-    mutate_chance = random.randint(0, 20)
+    mutate_chance = random.randint(0, 10)
 
     if mutate_chance != 0:
         return ca_cut
@@ -58,12 +58,12 @@ def ca_mutate(ca_cut):
     index = random.randint(0, 3)
 
     if index == 0:
-        ca_cut[index] = random.randint(1, 800) / 2000
+        ca_cut[index] = random.randint(1, 800) / 1000
     elif index == 1:
-        ca_cut[index] = random.randint(1, 2000) / 2000
+        ca_cut[index] = random.randint(1, 2000) / 1000
     elif index == 2:
-        ca_cut[index] = random.randint(1, 240) / 2000
+        ca_cut[index] = random.randint(1, 240) / 1000
     elif index == 3:
-        ca_cut[index] = random.randint(1, 3000) / 4000
+        ca_cut[index] = random.randint(1, 1000) / 2000
 
     return ca_cut

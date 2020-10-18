@@ -43,10 +43,10 @@ def generate_individual():
 # Creates random cut ranges for the observation ranges
 def generate_ca_cut():
     ca_cut = [0.0] * 4
-    ca_cut[0] = random.randint(1, 800) / 2000
-    ca_cut[1] = random.randint(1, 2000) / 2000
-    ca_cut[2] = random.randint(1, 240) / 2000
-    ca_cut[3] = random.randint(1, 3000) / 4000
+    ca_cut[0] = random.randint(1, 800) / 1000
+    ca_cut[1] = random.randint(1, 2000) / 1000
+    ca_cut[2] = random.randint(1, 240) / 1000
+    ca_cut[3] = random.randint(1, 1000) / 2000
 
     return ca_cut
 
