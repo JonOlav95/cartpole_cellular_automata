@@ -12,7 +12,7 @@ A new population is created by the best performers in the previous population
 """
 
 
-# Function used to store data_2 in textfiles
+# Function used to store data in textfiles
 def store_data(pop, gen, rew):
     pop = sorted(pop, key=lambda x: x.reward, reverse=True)
 
@@ -23,7 +23,7 @@ def store_data(pop, gen, rew):
 
         for s in pop:
             length = len(str(s.chromosome))
-            file.write("Reward: " + str(s.reward) + "   \tchromosome: " + str(s.get_chromosome()))
+            file.write("Reward: " + str(s.reward) + "   \tchromosome: " + str(s.chromosome))
 
             for i in range(30 - length):
                 file.write(" ")

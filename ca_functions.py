@@ -112,7 +112,7 @@ def visualize_board(board, title=None):
 
 # TODO: Change func name
 def generate_action(initial_board, individual):
-    solution = individual.get_chromosome()
+    solution = individual.chromosome
 
     mapped = map_rule(solution)
 

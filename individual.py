@@ -1,7 +1,7 @@
 class Individual:
     """ An individual is also referred to as a "solution".
 
-    A individual consists of a chromosome. A chromosome consists
+    A individual consists of two chromosomes. A chromosome consists
     of genes.
 
     In our case the genes are CA rules, and the chromosome is a
@@ -17,12 +17,3 @@ class Individual:
 
     def set_reward(self, reward):
         self.reward = reward
-
-    def append_gene(self, gene):
-        self.chromosome.append(gene)
-
-    def get_chromosome(self):
-        return self.chromosome
-
-    def set_chromosome(self, chromosome):
-        self.chromosome = chromosome
