@@ -105,14 +105,13 @@ def uniform_crossover_flip(p_c, c1_len, c2_len, c1_c, c2_c):
 
 def uniform_crossover(p1, p2):
 
-    '''
     if random_offspring(p1, p2):
         print("Creating random offspring")
         individual_1 = generate_individual()
         individual_2 = generate_individual()
 
         return individual_1, individual_2
-    '''
+
     c1_ca = p1.chromosome_ca
     c2_ca = p2.chromosome_ca
 
@@ -174,9 +173,6 @@ def generate(population):
         while parent_1 == parent_2:
             parent_1 = population[npr.choice(len(population), p=selection_probs)]
             parent_2 = population[npr.choice(len(population), p=selection_probs)]
-
-            if random_offspring(parent_1, parent_2):
-                parent_1 = parent_2
 
         c1, c2 = uniform_crossover(parent_1, parent_2)
         ca_1, ca_2 = uniform_crossover_ca(c1.chromosome_ca, c2.chromosome_ca)
