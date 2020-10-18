@@ -72,10 +72,17 @@ def uniform_crossover_ca(ca_1, ca_2):
 
 def random_offspring(parent_1, parent_2):
 
-    if parent_1.chromosome == parent_2.chromosome and parent_1.reward != 500 and parent_2.reward != 500:
-        return True
+    if parent_1.reward == 500 and parent_2.reward == 500:
+        return False
 
-    return False
+    if len(parent_1.chromosome) != len(parent_2.chromosome):
+        return False
+
+    for gene in parent_1.chromosome:
+        if gene not in parent_2.chromosome:
+            return False
+
+    return True
 
 
 def uniform_crossover_flip(p_c, c1_len, c2_len, c1_c, c2_c):
