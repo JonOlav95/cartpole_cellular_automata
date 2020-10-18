@@ -43,10 +43,10 @@ def generate_individual():
 # Creates random cut ranges for the observation ranges
 def generate_ca_cut():
     ca_cut = [0.0] * 4
-    ca_cut[0] = random.randint(1, 800) / 1000
-    ca_cut[1] = random.randint(1, 2000) / 1000
-    ca_cut[2] = random.randint(1, 240) / 1000
-    ca_cut[3] = random.randint(1, 3000) / 1000
+    ca_cut[0] = random.randint(1, 800) / 2000
+    ca_cut[1] = random.randint(1, 2000) / 2000
+    ca_cut[2] = random.randint(1, 240) / 2000
+    ca_cut[3] = random.randint(1, 3000) / 4000
 
     return ca_cut
 
@@ -72,15 +72,15 @@ def uniform_crossover_ca(ca_1, ca_2):
 
 def random_offspring(parent_1, parent_2):
 
-    if parent_1.reward == 500 and parent_2.reward == 500:
-        return False
-
     if len(parent_1.chromosome) != len(parent_2.chromosome):
         return False
 
     for gene in parent_1.chromosome:
         if gene not in parent_2.chromosome:
             return False
+
+    if parent_1.reward == 500 and parent_2.reward == 500:
+        return False
 
     return True
 
@@ -105,12 +105,14 @@ def uniform_crossover_flip(p_c, c1_len, c2_len, c1_c, c2_c):
 
 def uniform_crossover(p1, p2):
 
+    '''
     if random_offspring(p1, p2):
+        print("Creating random offspring")
         individual_1 = generate_individual()
         individual_2 = generate_individual()
 
         return individual_1, individual_2
-
+    '''
     c1_ca = p1.chromosome_ca
     c2_ca = p2.chromosome_ca
 
@@ -120,14 +122,8 @@ def uniform_crossover(p1, p2):
     c1_c = []
     c2_c = []
 
-    total_len = len(p1_c) + len(p2_c)
-
-    if total_len % 2 != 0:
-        c1_len = int((total_len / 2) + 1)
-        c2_len = int(total_len / 2)
-    else:
-        c1_len = total_len / 2
-        c2_len = total_len / 2
+    c1_len = len(p1_c)
+    c2_len = len(p2_c)
 
     uniform_crossover_flip(p1_c, c1_len, c2_len, c1_c, c2_c)
     uniform_crossover_flip(p2_c, c1_len, c2_len, c1_c, c2_c)
@@ -163,7 +159,7 @@ def generate(population):
 
     # Sort the population to find out which had the best performance
     population = sorted(population, key=lambda x: x.reward, reverse=True)
-    total_remove = 96
+    total_remove = 94
 
     # Elitism
     new_population = population[:(len(population) - total_remove)]
@@ -178,6 +174,9 @@ def generate(population):
         while parent_1 == parent_2:
             parent_1 = population[npr.choice(len(population), p=selection_probs)]
             parent_2 = population[npr.choice(len(population), p=selection_probs)]
+
+            if random_offspring(parent_1, parent_2):
+                parent_1 = parent_2
 
         c1, c2 = uniform_crossover(parent_1, parent_2)
         ca_1, ca_2 = uniform_crossover_ca(c1.chromosome_ca, c2.chromosome_ca)
