@@ -85,28 +85,10 @@ def random_offspring(parent_1, parent_2):
     return True
 
 
-def uniform_crossover_flip(p_c, c1_len, c2_len, c1_c, c2_c):
-    for gene in p_c:
-        if len(c1_c) >= c1_len:
-            c2_c.append(gene)
-            continue
-
-        if len(c2_c) >= c2_len:
-            c1_c.append(gene)
-            continue
-
-        flip = random.randint(0, 1)
-        if flip == 0:
-            c1_c.append(gene)
-
-        elif flip == 1:
-            c2_c.append(gene)
-
-
 def uniform_crossover(p1, p2):
 
     if random_offspring(p1, p2):
-        print("Creating random offspring")
+        print("Generating random offspring")
         individual_1 = generate_individual()
         individual_2 = generate_individual()
 
@@ -115,29 +97,45 @@ def uniform_crossover(p1, p2):
     c1_ca = p1.chromosome_ca
     c2_ca = p2.chromosome_ca
 
-    p1_c = p1.chromosome
-    p2_c = p2.chromosome
+    p1 = p1.chromosome
+    p2 = p2.chromosome
 
-    c1_c = []
-    c2_c = []
+    c1 = [0] * len(p1)
+    c2 = [0] * len(p2)
 
-    c1_len = len(p1_c)
-    c2_len = len(p2_c)
+    if len(p1) > len(p2):
+        longest = len(p1)
+        shortest = len(p2)
+    else:
+        longest = len(p2)
+        shortest = len(p1)
 
-    uniform_crossover_flip(p1_c, c1_len, c2_len, c1_c, c2_c)
-    uniform_crossover_flip(p2_c, c1_len, c2_len, c1_c, c2_c)
+    for i in range(shortest):
+        flip = random.randint(0, 1)
 
-    individual_1 = Individual(len(c1_c))
-    individual_2 = Individual(len(c2_c))
+        if flip == 1:
+            c1[i] = p1[i]
+            c2[i] = p2[i]
+        else:
+            c1[i] = p2[i]
+            c2[i] = p1[i]
 
-    individual_1.chromosome = c1_c
-    individual_2.chromosome = c2_c
+    for i in range(shortest, longest):
+        if len(p1) > len(p2):
+            c1[i] = p1[i]
+        else:
+            c2[i] = p2[i]
+
+    individual_1 = Individual(len(c1))
+    individual_2 = Individual(len(c2))
+
+    individual_1.chromosome = c1
+    individual_2.chromosome = c2
 
     individual_1.chromosome_ca = c1_ca
     individual_2.chromosome_ca = c2_ca
 
     return individual_1, individual_2
-
 
 
 def generate(population):

@@ -4,56 +4,6 @@ from genetic_algorithms import generate_individual, generate_ca_cut
 from individual import Individual
 
 
-def uniform_crossover_2(parent_1, parent_2):
-
-    if parent_1.chromosome == parent_2.chromosome and parent_1.reward != 500 and parent_2.reward != 500:
-        individual_1 = generate_individual()
-        individual_2 = generate_individual()
-
-        return individual_1, individual_2
-
-    child_1_ca = parent_1.chromosome_ca
-    child_2_ca = parent_2.chromosome_ca
-
-    parent_1 = parent_1.chromosome
-    parent_2 = parent_2.chromosome
-
-    child_1 = [0] * len(parent_1)
-    child_2 = [0] * len(parent_2)
-
-    if len(parent_1) > len(parent_2):
-        longest = len(parent_1)
-        shortest = len(parent_2)
-    else:
-        longest = len(parent_2)
-        shortest = len(parent_1)
-
-    for i in range(shortest):
-        flip = random.randint(0, 1)
-
-        if flip == 1:
-            child_1[i] = parent_1[i]
-            child_2[i] = parent_2[i]
-        else:
-            child_1[i] = parent_2[i]
-            child_2[i] = parent_1[i]
-
-    for i in range(shortest, longest):
-        if len(parent_1) > len(parent_2):
-            child_1[i] = parent_1[i]
-        else:
-            child_2[i] = parent_2[i]
-
-    individual_1 = Individual(len(child_1))
-    individual_2 = Individual(len(child_2))
-
-    individual_1.chromosome = child_1
-    individual_2.chromosome = child_2
-
-    individual_1.chromosome_ca = child_1_ca
-    individual_2.chromosome_ca = child_2_ca
-
-    return individual_1, individual_2
 
 
 
@@ -127,3 +77,58 @@ def one_point_crossover_2(parent_1, parent_2):
 
     return child
 
+
+def uniform_crossover_flip(p_c, c1_len, c2_len, c1_c, c2_c):
+    for gene in p_c:
+        if len(c1_c) >= c1_len:
+            c2_c.append(gene)
+            continue
+
+        if len(c2_c) >= c2_len:
+            c1_c.append(gene)
+            continue
+
+        flip = random.randint(0, 1)
+        if flip == 0:
+            c1_c.append(gene)
+
+        elif flip == 1:
+            c2_c.append(gene)
+
+
+def uniform_crossover(p1, p2):
+
+    '''
+    if random_offspring(p1, p2):
+        print("Creating random offspring")
+        individual_1 = generate_individual()
+        individual_2 = generate_individual()
+
+        return individual_1, individual_2
+    '''
+
+    c1_ca = p1.chromosome_ca
+    c2_ca = p2.chromosome_ca
+
+    p1_c = p1.chromosome
+    p2_c = p2.chromosome
+
+    c1_c = []
+    c2_c = []
+
+    c1_len = len(p1_c)
+    c2_len = len(p2_c)
+
+    uniform_crossover_flip(p1_c, c1_len, c2_len, c1_c, c2_c)
+    uniform_crossover_flip(p2_c, c1_len, c2_len, c1_c, c2_c)
+
+    individual_1 = Individual(len(c1_c))
+    individual_2 = Individual(len(c2_c))
+
+    individual_1.chromosome = c1_c
+    individual_2.chromosome = c2_c
+
+    individual_1.chromosome_ca = c1_ca
+    individual_2.chromosome_ca = c2_ca
+
+    return individual_1, individual_2
