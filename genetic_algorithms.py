@@ -156,7 +156,7 @@ def generate(population):
 
     # Sort the population to find out which had the best performance
     population = sorted(population, key=lambda x: x.reward, reverse=True)
-    total_remove = 95
+    total_remove = 96
 
     # Elitism
     new_population = population[:(len(population) - total_remove)]
