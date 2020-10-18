@@ -85,6 +85,83 @@ def random_offspring(parent_1, parent_2):
     return True
 
 
+def uniform_binary_tmp(p1_binary, p2_binary):
+
+    c1 = []
+    c2 = []
+    for i in range(len(p2_binary)):
+
+        gene_1 = []
+        gene_2 = []
+        for j in range(8):
+            flip = random.randint(0, 1)
+
+            if flip == 1:
+                gene_1.append(p1_binary[i][j])
+                gene_2.append(p2_binary[i][j])
+            else:
+                gene_1.append(p2_binary[i][j])
+                gene_2.append(p1_binary[i][j])
+
+        c2.append(gene_1)
+        c1.append(gene_2)
+
+    for i in range(len(p2_binary), len(p1_binary)):
+        gene_1 = []
+        for j in range(8):
+            gene_1.append(p1_binary[i][j])
+
+        c1.append(gene_1)
+
+    return c1, c2
+
+
+def uniform_crossover_binary(p1, p2):
+    if random_offspring(p1, p2):
+        print("Generating random offspring")
+        individual_1 = generate_individual()
+        individual_2 = generate_individual()
+
+        return individual_1, individual_2
+
+    c1_ca = p1.chromosome_ca
+    c2_ca = p2.chromosome_ca
+
+    p1 = p1.chromosome
+    p2 = p2.chromosome
+
+    p1_binary = []
+    p2_binary = []
+    for rule_id in p1:
+        p1_binary.append(list(map(int, format(rule_id, "#010b")[2:])))
+
+    for rule_id in p2:
+        p2_binary.append(list(map(int, format(rule_id, "#010b")[2:])))
+
+    if len(p1) > len(p2):
+        c1, c2 = uniform_binary_tmp(p1_binary, p2_binary)
+    else:
+        c2, c1 = uniform_binary_tmp(p2_binary, p1_binary)
+
+
+    for i in range(len(c1)):
+        c1[i] = int("".join(str(x) for x in c1[i]), 2)
+
+    for j in range(len(c2)):
+        c2[j] = int("".join(str(x) for x in c2[j]), 2)
+
+    individual_1 = Individual(len(c1))
+    individual_2 = Individual(len(c2))
+
+    individual_1.chromosome = c1
+    individual_2.chromosome = c2
+
+    individual_1.chromosome_ca = c1_ca
+    individual_2.chromosome_ca = c2_ca
+
+    return individual_1, individual_2
+
+
 def uniform_crossover(p1, p2):
 
     if random_offspring(p1, p2):
@@ -172,7 +249,7 @@ def generate(population):
             parent_1 = population[npr.choice(len(population), p=selection_probs)]
             parent_2 = population[npr.choice(len(population), p=selection_probs)]
 
-        c1, c2 = uniform_crossover(parent_1, parent_2)
+        c1, c2 = uniform_crossover_binary(parent_1, parent_2)
         ca_1, ca_2 = uniform_crossover_ca(c1.chromosome_ca, c2.chromosome_ca)
 
         c1.chromosome = mutate(c1.chromosome)
