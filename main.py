@@ -1,7 +1,8 @@
 import gym
+
+from data_handling import tmp_func
 from genetic_algorithms import *
 from simulation import simulate
-import csv
 
 """ Sequence of the program:
     
@@ -35,6 +36,7 @@ if __name__ == '__main__':
 
     env = gym.make("CartPole-v1")
     population = initial_population()
+    #population = tmp_func()
 
     # Run the simulation for 1000 generations (steps)
     for generation in range(1000):

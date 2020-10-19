@@ -119,11 +119,18 @@ def generate_action(initial_board, individual):
     board_outer = converge_ca(initial_board, mapped)
 
     '''
+
     name = ""
     for n in mapped:
         name += (n["name"]) + " "
 
+    if sum(board_outer[len(board_outer) - 1]) > len(board_outer[len(board_outer) - 1]) / 2:
+        name += "\n Action 1"
+    else:
+        name += "\n Action 0"
+
     visualize_board(board_outer, name)
+
     '''
 
     if sum(board_outer[len(board_outer) - 1]) > len(board_outer[len(board_outer) - 1]) / 2:

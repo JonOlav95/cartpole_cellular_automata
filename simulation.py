@@ -9,6 +9,8 @@ def simulate(env, solution):
 
     while True:
 
+        #env.render()
+
         # Create a cellular automata array from the observation
         ca_arr = ca_generate(observation, solution.chromosome_ca)
 
