@@ -97,7 +97,7 @@ def iterate(board, rule):
     return new_board[1:-1]
 
 
-def converge_ca(initial_board, solution, num_iterations=1):
+def converge_ca(initial_board, solution, num_iterations=100):
     """Converges the CA to find the output.
 
     Arguments:
