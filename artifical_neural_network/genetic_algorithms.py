@@ -1,6 +1,7 @@
-import numpy.random as npr
 import random
 from artifical_neural_network.individual import Individual
+from crossover import uniform_crossover
+from selection import wheel_selection
 
 
 def mutate(chromosome):
@@ -21,70 +22,9 @@ def mutate(chromosome):
         weight = random.uniform(-1, 1)
         chromosome[index] = weight
 
-        return chromosome
-
-
-def uniform_crossover(p1_chromosome, p2_chromosome):
-    """Uniform crossover between two parents to produce two offspring.
-
-    Takes all the values from the parents and randomly split them
-    between the offsprings.
-
-    Args:
-        p1_chromosome: The first parent, a list of numbers.
-        p2_chromosome: The second parent, A list of numbers.
-    Returns:
-        Two lists of numbers which represent the offspring of
-        the two parents.
-    """
-    c1_chromosome = []
-    c2_chromosome = []
-
-    for i in range(len(p1_chromosome)):
-        flip = random.randint(0, 1)
-
-        if flip == 1:
-            c1_chromosome.append(p1_chromosome[i])
-            c2_chromosome.append(p2_chromosome[i])
-        else:
-            c1_chromosome.append(p2_chromosome[i])
-            c2_chromosome.append(p1_chromosome[i])
-
-    return c1_chromosome, c2_chromosome
-
-
-def wheel_selection(total_offspring, population):
-    """Wheel selection used to select parents.
-
-    High reward parents have a higher chance of being chosen.
-
-    Args:
-        total_offspring: The total amount of offspring the new population requires.
-        population: The population of potential parents.
-    """
-    max_reward = sum([c.reward for c in population])
-    selection_prob = [c.reward / max_reward for c in population]
-
-    parents_1 = []
-    parents_2 = []
-
-    for i in range(int(total_offspring / 2)):
-
-        p1 = None
-        p2 = None
-
-        while p1 == p2:
-            p1 = population[npr.choice(len(population), p=selection_prob)]
-            p2 = population[npr.choice(len(population), p=selection_prob)]
-
-        parents_1.append(p1)
-        parents_2.append(p2)
-
-    return parents_1, parents_2
-
 
 def survival(population):
-    """Applies the evolutionary survival process to the population
+    """Applies the evolutionary survival process to the population.
 
     A few select elites with the best reward (fitness) is automatically part of the next generation.
     From the population parents are selected to create offspring. The offspring will be part of

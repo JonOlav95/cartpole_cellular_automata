@@ -7,7 +7,6 @@ class Individual:
     In our case the genes are CA rules, and the chromosome is a
     sequence of these rules. The is between 1-5 in length.
     """
-
     def __init__(self, length=0):
         self.chromosome = []
         self.chromosome_ca = []

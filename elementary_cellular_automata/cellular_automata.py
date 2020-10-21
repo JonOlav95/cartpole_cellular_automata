@@ -1,10 +1,16 @@
-from past.builtins import xrange
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def ca_generate(obs, ca_range):
+    """Arithmetically generates the first row in the CA board
 
+    Arguments:
+        obs: The observation. Is a list of numbers.
+        ca_range: The CA range which decides where the initial 1s are placed.
+
+    Returns:
+        The first row of the CA.
+    """
     cart_position = []
     cart_velocity = []
     pole_angle = []
@@ -49,6 +55,15 @@ def ca_generate(obs, ca_range):
 
 
 def map_rule(rule_ids):
+    """Maps the ruleset to their binary meaning.
+
+    Arguments:
+        rule_ids: A set of rules. Of the type list.
+
+    Returns:
+        Returns a list of directories. A directory contains the all the possible patterns
+        and whether or not the rule activates on the pattern. It also includes the name of the rule
+    """
     mapped_arr = []
 
     input_patterns = [
@@ -82,10 +97,21 @@ def iterate(board, rule):
     return new_board[1:-1]
 
 
-def converge_ca(initial_board, solution, num_iterations=100):
+def converge_ca(initial_board, solution, num_iterations=1):
+    """Converges the CA to find the output.
+
+    Arguments:
+        initial_board: The first row of the CA.
+        solution: The list of rules in the directory form created by the mapped function.
+        num_iterations: The height of the CA.
+
+    Returns:
+        All the rows in the CA.
+    """
     board = initial_board
     rows = [board]
 
+    # Keeps the height consistent regardless of ruleset size.
     num_iterations = int(num_iterations / len(solution))
 
     for i in range(num_iterations):
@@ -97,41 +123,20 @@ def converge_ca(initial_board, solution, num_iterations=100):
     return rows
 
 
-# Function can be used to visualize the CA board
-def visualize_board(board, title=None):
-    plt.figure(figsize=(5, 2.5))
-    plt.imshow(board, cmap="Greys")
-    plt.axis("off")
+def converge_action(initial_board, individual):
+    """Finds the action this step.
 
-    if title is not None:
-        plt.title(title, fontsize=14)
+    Arguments:
+        initial_board: The first row of the CA. A list of integers.
+        individual: The solution. Of the type object Individual
 
-    plt.show()
-    plt.close()
-
-
-# TODO: Change func name
-def generate_action(initial_board, individual):
+    Returns:
+        0 or 1.
+    """
     solution = individual.chromosome
 
     mapped = map_rule(solution)
-
     board_outer = converge_ca(initial_board, mapped)
-
-    '''
-
-    name = ""
-    for n in mapped:
-        name += (n["name"]) + " "
-
-    if sum(board_outer[len(board_outer) - 1]) > len(board_outer[len(board_outer) - 1]) / 2:
-        name += "\n Action 1"
-    else:
-        name += "\n Action 0"
-
-    visualize_board(board_outer, name)
-
-    '''
 
     if sum(board_outer[len(board_outer) - 1]) > len(board_outer[len(board_outer) - 1]) / 2:
         return 1

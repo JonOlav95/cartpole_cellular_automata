@@ -1,31 +1,31 @@
 import random
 
 
-# Adds a random gene to the individuals chromosome
 def add_gene(child):
+    """Adds a random gene to the individuals chromosome"""
     index = random.randint(0, len(child))
     gene = random.randint(0, 255)
 
     child.insert(index, gene)
 
 
-# Removes a random gene from the individual chromosome
 def remove_gene(child):
+    """Removes a random gene from the individual chromosome"""
     index = random.randint(0, len(child) - 1)
     child.pop(index)
 
 
-# Modify a random gene in the individuals chromosome
 def modify_gene(child):
+    """Modify a random gene in the individuals chromosome"""
     m = random.randint(0, len(child) - 1)
     child[m] = random.randint(0, 255)
 
 
-# The individual has a chance of being mutated in three different ways
 def mutate(child):
+    """The individual has a chance of being mutated in three different ways"""
     mutate_chance = random.randint(0, 10)
     if mutate_chance != 0:
-        return child
+        return
 
     if len(child) == 5:
         v_mutation = random.randint(1, 2)
@@ -45,11 +45,9 @@ def mutate(child):
     elif v_mutation == 2:
         remove_gene(child)
 
-    return child
 
-
-# Mutation of the ca chromosome
 def ca_mutate(ca_cut):
+    """Mutation of the ca chromosome"""
     mutate_chance = random.randint(0, 10)
 
     if mutate_chance != 0:
@@ -66,4 +64,3 @@ def ca_mutate(ca_cut):
     elif index == 3:
         ca_cut[index] = random.randint(1, 1000) / 2000
 
-    return ca_cut

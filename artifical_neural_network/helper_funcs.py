@@ -23,7 +23,7 @@ def random_neural_network():
 
 
 def init_population():
-    """Initiates a population of individuals with random weights and biases
+    """Initiates a population of individuals with random weights and biases.
 
     Returns:
         A list of the object Individual.

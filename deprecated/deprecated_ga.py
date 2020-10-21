@@ -1,6 +1,7 @@
 import random
 
-from cellular_automata.individual import Individual
+from elementary_cellular_automata.genetic_algorithms import random_offspring, generate_individual
+from elementary_cellular_automata.individual import Individual
 
 
 def one_point_crossover(parent_1, parent_2):
@@ -123,6 +124,59 @@ def uniform_crossover(p1, p2):
 
     individual_1.chromosome = c1_c
     individual_2.chromosome = c2_c
+
+    individual_1.chromosome_ca = c1_ca
+    individual_2.chromosome_ca = c2_ca
+
+    return individual_1, individual_2
+
+
+def uniform_crossover_3(p1, p2):
+
+    if random_offspring(p1, p2):
+        print("Generating random offspring")
+        individual_1 = generate_individual()
+        individual_2 = generate_individual()
+
+        return individual_1, individual_2
+
+    c1_ca = p1.chromosome_ca
+    c2_ca = p2.chromosome_ca
+
+    p1 = p1.chromosome
+    p2 = p2.chromosome
+
+    c1 = [0] * len(p1)
+    c2 = [0] * len(p2)
+
+    if len(p1) > len(p2):
+        longest = len(p1)
+        shortest = len(p2)
+    else:
+        longest = len(p2)
+        shortest = len(p1)
+
+    for i in range(shortest):
+        flip = random.randint(0, 1)
+
+        if flip == 1:
+            c1[i] = p1[i]
+            c2[i] = p2[i]
+        else:
+            c1[i] = p2[i]
+            c2[i] = p1[i]
+
+    for i in range(shortest, longest):
+        if len(p1) > len(p2):
+            c1[i] = p1[i]
+        else:
+            c2[i] = p2[i]
+
+    individual_1 = Individual(len(c1))
+    individual_2 = Individual(len(c2))
+
+    individual_1.chromosome = c1
+    individual_2.chromosome = c2
 
     individual_1.chromosome_ca = c1_ca
     individual_2.chromosome_ca = c2_ca
