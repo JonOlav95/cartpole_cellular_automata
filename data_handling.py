@@ -1,6 +1,5 @@
 import re
-import numpy as np
-from individual import Individual
+from cellular_automata.individual import Individual
 
 
 def tmp_func():
@@ -24,4 +23,3 @@ def tmp_func():
     return individuals
 
 
-tmp_func()

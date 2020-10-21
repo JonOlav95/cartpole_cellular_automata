@@ -1,7 +1,6 @@
 import random
 
-from genetic_algorithms import generate_individual, generate_ca_cut
-from individual import Individual
+from cellular_automata.individual import Individual
 
 
 def one_point_crossover(parent_1, parent_2):
