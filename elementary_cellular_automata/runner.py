@@ -1,6 +1,5 @@
 import gym
 from elementary_cellular_automata.cellular_automata import ca_generate, converge_action
-from elementary_cellular_automata.data_handling import store_data
 from elementary_cellular_automata.genetic_algorithms import *
 from elementary_cellular_automata.helper_funcs import initial_population
 

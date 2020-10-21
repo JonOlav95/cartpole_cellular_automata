@@ -15,7 +15,6 @@ def simulate(env, sol, render):
     Returns:
         The reward (fitness) the solution obtained during the simulation.
     """
-
     solution_reward = 0
     observation = env.reset()
 
