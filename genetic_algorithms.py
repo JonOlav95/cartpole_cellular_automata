@@ -2,6 +2,7 @@ import random
 from individual import Individual
 import numpy.random as npr
 from mutation import mutate, ca_mutate
+import numpy as np
 
 
 # Creates an initial population with random genes
@@ -53,7 +54,6 @@ def generate_ca_cut():
 
 # Uniform crossover on the ca chromosome
 def uniform_crossover_ca(ca_1, ca_2):
-
     child_1 = [0] * 4
     child_2 = [0] * 4
 
@@ -71,7 +71,6 @@ def uniform_crossover_ca(ca_1, ca_2):
 
 
 def random_offspring(parent_1, parent_2):
-
     if len(parent_1.chromosome) != len(parent_2.chromosome):
         return False
 
@@ -86,7 +85,6 @@ def random_offspring(parent_1, parent_2):
 
 
 def uniform_binary_tmp(p1_binary, p2_binary):
-
     c1 = []
     c2 = []
     for i in range(len(p2_binary)):
@@ -143,7 +141,6 @@ def uniform_crossover_binary(p1, p2):
     else:
         c2, c1 = uniform_binary_tmp(p2_binary, p1_binary)
 
-
     for i in range(len(c1)):
         c1[i] = int("".join(str(x) for x in c1[i]), 2)
 
@@ -163,7 +160,6 @@ def uniform_crossover_binary(p1, p2):
 
 
 def uniform_crossover(p1, p2):
-
     if random_offspring(p1, p2):
         print("Generating random offspring")
         individual_1 = generate_individual()
@@ -215,6 +211,39 @@ def uniform_crossover(p1, p2):
     return individual_1, individual_2
 
 
+def judgement_day(population):
+    # Loop through the population to check if there is too many similar individuals
+    # Create a new generation by nuking the population if this is the case
+    # Spare the best individual
+    judgement_day = False
+    length_diff = []
+    chromosomes = []
+
+    # This for-clause may be used to look similar chromosome lengths.
+    for i in population:
+        chromosomes.append(i.chromosome)
+        if i.length not in length_diff:
+            length_diff.append(i.length)
+    print("There are " + str(len(length_diff)) + " different chromosome lengths")
+
+    # Find the number of unique units (hipsters) in the population
+    x = np.array(chromosomes, dtype=object)
+    hipsters = len(np.unique(x))
+    print("Number of hipsters in the population = " + str(hipsters))
+
+    if hipsters <= 100:
+        judgement_day = True
+
+    if judgement_day:
+        # Keep the individual with the highest reward. Then add a new population, and return it
+        print("Judgement day is upon this uniform population. Nuke incoming!")
+        new_population = population[:(len(population) - 99)]
+        fallout_population = initial_population()
+        fallout_population.pop()
+        new_population.extend(fallout_population)
+        return new_population
+
+
 def generate(population):
     """Generate a new population from the existing population.
 
@@ -233,6 +262,9 @@ def generate(population):
 
     # Sort the population to find out which had the best performance
     population = sorted(population, key=lambda x: x.reward, reverse=True)
+
+    judgement_day(population)
+
     total_remove = 94
 
     # Elitism
