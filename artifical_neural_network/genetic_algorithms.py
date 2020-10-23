@@ -1,7 +1,10 @@
 import random
+
+from artifical_neural_network.helper_funcs import random_neural_network
 from artifical_neural_network.individual import Individual
 from crossover import uniform_crossover
-from selection import wheel_selection
+from premature_convergence import judgement_day
+from selection import wheel_selection, tournament_selection
 
 
 def mutate(chromosome):
@@ -14,7 +17,7 @@ def mutate(chromosome):
         A list of the same size which may or may not be mutated.
     """
     while True:
-        chance = random.randint(0, 1)
+        chance = random.randint(0, 20)
         if chance != 0:
             return chromosome
 
@@ -44,8 +47,21 @@ def survival(population):
     population = sorted(population, key=lambda x: x.reward, reverse=True)
     total_remove = 94
 
+    if judgement_day(population):
+        new_population = []
+
+        if population[0].reward != 500:
+            new_population.append(population[0])
+
+        for i in range(100 - len(new_population)):
+            new_population.append(random_neural_network())
+
+        return new_population
+
     # Elitism
     new_population = population[:(len(population) - total_remove)]
+
+    #parent_1, parent_2 = tournament_selection(total_remove, population)
 
     parent_1, parent_2 = wheel_selection(total_remove, population)
 

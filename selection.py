@@ -1,4 +1,6 @@
 import numpy.random as npr
+import random
+from operator import attrgetter
 
 
 def wheel_selection(total_offspring, population):
@@ -29,3 +31,20 @@ def wheel_selection(total_offspring, population):
         parents_2.append(p2)
 
     return parents_1, parents_2
+
+
+def tournament_selection(total_offspring, population):
+    n = 25
+    parents = []
+
+    for i in range(total_offspring):
+        contestants = random.sample(population, n)
+        winner = max(contestants, key=attrgetter("reward"))
+        parents.append(winner)
+
+    parents_1 = parents[0:int(total_offspring/2)]
+    parents_2 = parents[int(total_offspring/2):total_offspring]
+
+    return parents_1, parents_2
+
+

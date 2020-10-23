@@ -49,10 +49,11 @@ def main():
         for individual in population:
             total_reward += simulate(environment, individual, render)
 
-        if total_reward > 30000:
+        if total_reward > 47500:
             render = True
 
-        print("generation: " + str(generation) + "  reward: " + str(total_reward) + "  length: " + str(len(population)))
+        print("generation: " + str(generation))
+        print("reward: " + str(total_reward))
         population = survival(population)
 
 
