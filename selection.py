@@ -34,7 +34,8 @@ def wheel_selection(total_offspring, population):
 
 
 def tournament_selection(total_offspring, population):
-    n = 25
+
+    n = 15
     parents = []
 
     for i in range(total_offspring):

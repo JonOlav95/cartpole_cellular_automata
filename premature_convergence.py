@@ -15,7 +15,7 @@ def judgement_day(population):
     ratio = unique_genes / total_genes
     print("Unique Genes Percentage: " + str(round(ratio * 100, 2)))
 
-    if ratio < 0.010:
+    if ratio < 0.015:
         return True
 
     return False

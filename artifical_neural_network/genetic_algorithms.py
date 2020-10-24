@@ -61,9 +61,9 @@ def survival(population):
     # Elitism
     new_population = population[:(len(population) - total_remove)]
 
-    #parent_1, parent_2 = tournament_selection(total_remove, population)
+    parent_1, parent_2 = tournament_selection(total_remove, population)
 
-    parent_1, parent_2 = wheel_selection(total_remove, population)
+    #parent_1, parent_2 = wheel_selection(total_remove, population)
 
     for i in range(int(total_remove / 2)):
         weight_1, weight_2 = uniform_crossover(parent_1[i].chromosome, parent_2[i].chromosome)
