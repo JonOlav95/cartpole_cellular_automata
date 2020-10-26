@@ -8,7 +8,7 @@ from selection import wheel_selection, tournament_selection
 
 
 def mutate(chromosome):
-    """Mutates the chromosome by randomly changing zero or more values.
+    """Mutates a chromosome.
 
     Args:
         chromosome: The list of numbers that will be mutated.
@@ -17,13 +17,24 @@ def mutate(chromosome):
         A list of the same size which may or may not be mutated.
     """
     while True:
-        chance = random.randint(0, 20)
-        if chance != 0:
+        chance = random.randint(0, 30)
+        if chance == 0:
+            index = random.randint(0, len(chromosome) - 1)
+            addition = random.uniform(-0.5, 0.5)
+            chromosome[index] += addition
+            if chromosome[index] < -1:
+                chromosome[index] = -1
+            elif chromosome[index] > 1:
+                chromosome[index] = 1
+
+        elif chance == 1:
+            index = random.randint(0, len(chromosome) - 1)
+            weight = random.uniform(-1, 1)
+            chromosome[index] = weight
+
+        else:
             return chromosome
 
-        index = random.randint(0, len(chromosome) - 1)
-        weight = random.uniform(-1, 1)
-        chromosome[index] = weight
 
 
 def survival(population):
@@ -48,10 +59,7 @@ def survival(population):
     total_remove = 94
 
     if judgement_day(population):
-        new_population = []
-
-        if population[0].reward != 500:
-            new_population.append(population[0])
+        new_population = [population[0]]
 
         for i in range(100 - len(new_population)):
             new_population.append(random_neural_network())
@@ -61,9 +69,9 @@ def survival(population):
     # Elitism
     new_population = population[:(len(population) - total_remove)]
 
-    parent_1, parent_2 = tournament_selection(total_remove, population)
+    #parent_1, parent_2 = tournament_selection(total_remove, population)
 
-    #parent_1, parent_2 = wheel_selection(total_remove, population)
+    parent_1, parent_2 = wheel_selection(total_remove, population)
 
     for i in range(int(total_remove / 2)):
         weight_1, weight_2 = uniform_crossover(parent_1[i].chromosome, parent_2[i].chromosome)

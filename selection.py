@@ -11,6 +11,9 @@ def wheel_selection(total_offspring, population):
     Args:
         total_offspring: The total amount of offspring the new population requires.
         population: The population of potential parents.
+    Returns:
+        Two lists of parents. The matching individuals for each index in both lists is
+        a pair of chosen parents.
     """
     max_reward = sum([c.reward for c in population])
     selection_prob = [c.reward / max_reward for c in population]
@@ -34,7 +37,21 @@ def wheel_selection(total_offspring, population):
 
 
 def tournament_selection(total_offspring, population):
+    """Tournament selection used to select parents.
 
+    To pick parents there will be a sequence of one-way tournaments
+    between n parents. The winner of the tournament is the individual
+    with the highest reward (fitness).
+    Note that this method does not currently avoid having a pair of
+    parents being the same individual.
+
+    Args:
+        total_offspring: The total amount of offspring the new population requires.
+        population: The population of potential parents.
+    Returns:
+        Two lists of parents. The matching individuals for each index in both lists is
+        a pair of chosen parents.
+    """
     n = 15
     parents = []
 

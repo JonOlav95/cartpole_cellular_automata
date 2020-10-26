@@ -28,6 +28,10 @@ class Neuron:
     def add_neighbour(self, to, weight):
         self.neighbours[to] = weight
 
+    def input_forward(self):
+        for neighbour, weight in self.neighbours.items():
+            neighbour.value += self.value * weight
+
     def forward(self):
         self.value += self.bias
         self.value = activation_func(self.value)
@@ -57,8 +61,11 @@ class NeuralNetwork:
         for i in range(4):
             self.neurons[i].value = observations[i]
 
-        for neuron in self.neurons:
-            neuron.forward()
+        for i in range(4):
+            self.neurons[i].input_forward()
+
+        for i in range(4, len(self.neurons)):
+            self.neurons[i].forward()
 
         return self.neurons[len(self.neurons) - 1].value
 
@@ -88,7 +95,7 @@ def init_neural_network(weights, bias):
 
     for i in range(total_inputs):
         for j in range(layer_length):
-            neural_network.add_edge(i, j, weights[n])
+            neural_network.add_edge(i, j + total_inputs, weights[n])
             n += 1
 
     for i in range(total_inputs, total_inputs + layer_length):

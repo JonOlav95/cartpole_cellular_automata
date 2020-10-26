@@ -2,7 +2,19 @@ import random
 
 
 def uniform_crossover_diff(p1_chromosome, p2_chromosome):
+    """Uniform crossover when the length of the parents are unequal.
 
+    Takes the values from the parents and randomly distribute them
+    between the offsprings. The size of the offsprings equals the size
+    of the parents.
+
+    Args:
+        p1_chromosome: The first parent, a list of numbers.
+        p2_chromosome: The second parent, A list of numbers.
+    Returns:
+        Two lists of numbers which represent the offspring of
+        the two parents.
+    """
     if len(p1_chromosome) > len(p2_chromosome):
         long_parent = p1_chromosome
         short_parent = p2_chromosome
@@ -54,7 +66,6 @@ def uniform_crossover(p1_chromosome, p2_chromosome):
         Two lists of numbers which represent the offspring of
         the two parents.
     """
-
     if len(p1_chromosome) != len(p2_chromosome):
         return uniform_crossover_diff(p1_chromosome, p2_chromosome)
 
