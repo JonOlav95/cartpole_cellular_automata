@@ -1,7 +1,8 @@
 import gym
-
-from artifical_neural_network.data_handling import store_data
+import time
+import os
 from elementary_cellular_automata.cellular_automata import ca_generate, converge_action
+from elementary_cellular_automata.data_handling import *
 from elementary_cellular_automata.genetic_algorithms import *
 from elementary_cellular_automata.helper_funcs import initial_population
 
@@ -39,6 +40,8 @@ def main():
     """Creates the CartPole environment version 1 (maximum 500 reward) and applies the population"""
     env = gym.make("CartPole-v1")
     population = initial_population()
+    folder_str = time.strftime("%Y%m%d-%H%M%S")
+    os.makedirs("ca_data/" + folder_str)
 
     for generation in range(1000):
 
@@ -50,7 +53,8 @@ def main():
             reward = simulate(env, solution)
             total_reward += reward
 
-        store_data(total_reward)
+        store_data(total_reward, folder_str)
+        store_data_all(population, generation, total_reward, folder_str)
 
         # Generate a new population by using genetic algorithms
         population = reproduce(population)

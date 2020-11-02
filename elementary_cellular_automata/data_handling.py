@@ -3,6 +3,7 @@ from individual import Individual
 import matplotlib.pyplot as plt
 
 
+
 # Messy functions occasionally used to store data
 
 def tmp_func():
@@ -16,7 +17,7 @@ def tmp_func():
         chromosome = list(map(int, line[1:len(line) - 4]))
         ca_cut = list(map(float, line[len(line) - 4:]))
 
-        individual = Individual(len(chromosome))
+        individual = Individual()
         individual.chromosome_1 = chromosome
         individual.chromosome_2 = ca_cut
 
@@ -26,11 +27,19 @@ def tmp_func():
     return individuals
 
 
+def store_data(rew, folder):
+
+    filename = "ca_data/" + folder + "/_all_rewards.txt"
+
+    with open(filename, mode="a") as file:
+        file.write(str(int(rew)) + "\n")
+
+
 # Function used to store data in textfiles
-def store_data(pop, gen, rew):
+def store_data_all(pop, gen, rew, folder):
     pop = sorted(pop, key=lambda x: x.reward, reverse=True)
 
-    filename = "data/" + str(gen) + "_" + str(rew) + ".txt"
+    filename = "ca_data/" + folder + "/" + str(gen) + "_" + str(rew) + ".txt"
 
     with open(filename, mode="w") as file:
         file.write("Generation: " + str(gen) + "\tTotal Reward: " + str(rew) + "\n")
