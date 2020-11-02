@@ -1,5 +1,5 @@
 import re
-from elementary_cellular_automata.individual import Individual
+from individual import Individual
 import matplotlib.pyplot as plt
 
 
@@ -17,8 +17,8 @@ def tmp_func():
         ca_cut = list(map(float, line[len(line) - 4:]))
 
         individual = Individual(len(chromosome))
-        individual.chromosome = chromosome
-        individual.chromosome_ca = ca_cut
+        individual.chromosome_1 = chromosome
+        individual.chromosome_2 = ca_cut
 
         individuals.append(individual)
 
@@ -36,13 +36,13 @@ def store_data(pop, gen, rew):
         file.write("Generation: " + str(gen) + "\tTotal Reward: " + str(rew) + "\n")
 
         for s in pop:
-            length = len(str(s.chromosome))
-            file.write("Reward: " + str(s.reward) + "   \tchromosome: " + str(s.chromosome))
+            length = len(str(s.chromosome_1))
+            file.write("Reward: " + str(s.reward) + "   \tchromosome: " + str(s.chromosome_1))
 
             for i in range(30 - length):
                 file.write(" ")
 
-            file.write(str(s.chromosome_ca) + "\n")
+            file.write(str(s.chromosome_2) + "\n")
 
 
 def visualize_board(board, title=None):

@@ -17,7 +17,6 @@ class Neuron:
         bias: The bias of the neuron which slightly adjusts the value.
         neighbours: The directory of neighbours which this neuron points to. Contains the neuron and the weight.
     """
-
     def __init__(self, id):
         """Inits the Neuron with an identification"""
         self.id = id
@@ -28,13 +27,11 @@ class Neuron:
     def add_neighbour(self, to, weight):
         self.neighbours[to] = weight
 
-    def input_forward(self):
-        for neighbour, weight in self.neighbours.items():
-            neighbour.value += self.value * weight
+    def forward(self, input_neuron=False):
 
-    def forward(self):
-        self.value += self.bias
-        self.value = activation_func(self.value)
+        if not input_neuron:
+            self.value += self.bias
+            self.value = activation_func(self.value)
 
         for neighbour, weight in self.neighbours.items():
             neighbour.value += self.value * weight
@@ -45,7 +42,6 @@ class NeuralNetwork:
     Attributes:
         neurons: The list of neurons used within the neural network.
     """
-
     def __init__(self):
         self.neurons = []
 
@@ -60,9 +56,7 @@ class NeuralNetwork:
     def traverse(self, observations):
         for i in range(4):
             self.neurons[i].value = observations[i]
-
-        for i in range(4):
-            self.neurons[i].input_forward()
+            self.neurons[i].forward(input_neuron=True)
 
         for i in range(4, len(self.neurons)):
             self.neurons[i].forward()
@@ -82,7 +76,6 @@ def init_neural_network(weights, bias):
     Returns:
         A NeuralNetwork object adjusted with the arguments.
     """
-
     neural_network = NeuralNetwork()
     total_neurons = 17
     total_inputs = 4

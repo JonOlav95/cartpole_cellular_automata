@@ -1,10 +1,10 @@
 import random
 
 from artifical_neural_network.helper_funcs import random_neural_network
-from artifical_neural_network.individual import Individual
 from crossover import uniform_crossover
 from premature_convergence import judgement_day
 from selection import wheel_selection, tournament_selection
+from individual import Individual
 
 
 def mutate(chromosome):
@@ -36,8 +36,7 @@ def mutate(chromosome):
             return chromosome
 
 
-
-def survival(population):
+def reproduce(population):
     """Applies the evolutionary survival process to the population.
 
     A few select elites with the best reward (fitness) is automatically part of the next generation.
@@ -74,8 +73,8 @@ def survival(population):
     parent_1, parent_2 = wheel_selection(total_remove, population)
 
     for i in range(int(total_remove / 2)):
-        weight_1, weight_2 = uniform_crossover(parent_1[i].chromosome, parent_2[i].chromosome)
-        bias_1, bias_2 = uniform_crossover(parent_1[i].bias_chromosome, parent_2[i].bias_chromosome)
+        weight_1, weight_2 = uniform_crossover(parent_1[i].chromosome_1, parent_2[i].chromosome_1)
+        bias_1, bias_2 = uniform_crossover(parent_1[i].chromosome_2, parent_2[i].chromosome_2)
 
         mutate(weight_1)
         mutate(weight_2)
@@ -85,11 +84,11 @@ def survival(population):
         c1 = Individual()
         c2 = Individual()
 
-        c1.chromosome = weight_1
-        c1.bias_chromosome = bias_1
+        c1.chromosome_1 = weight_1
+        c1.chromosome_2 = bias_1
 
-        c2.chromosome = weight_2
-        c2.bias_chromosome = bias_2
+        c2.chromosome_1 = weight_2
+        c2.chromosome_2 = bias_2
 
         new_population.append(c1)
         new_population.append(c2)

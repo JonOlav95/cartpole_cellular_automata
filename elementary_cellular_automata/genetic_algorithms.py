@@ -1,6 +1,6 @@
 from crossover import uniform_crossover
 from elementary_cellular_automata.helper_funcs import generate_individual
-from elementary_cellular_automata.individual import Individual
+from individual import Individual
 from elementary_cellular_automata.mutation import mutate, ca_mutate
 from selection import wheel_selection
 
@@ -23,11 +23,11 @@ def random_offspring(parent_1, parent_2):
     Returns:
         A boolean stating whether or not random offspring should be created.
     """
-    if len(parent_1.chromosome) != len(parent_2.chromosome):
+    if len(parent_1.chromosome_1) != len(parent_2.chromosome_1):
         return False
 
-    for gene in parent_1.chromosome:
-        if gene not in parent_2.chromosome:
+    for gene in parent_1.chromosome_1:
+        if gene not in parent_2.chromosome_1:
             return False
 
     if parent_1.reward == 500 and parent_2.reward == 500:
@@ -74,7 +74,7 @@ def uniform_crossover_binary(p1, p2):
     return c1, c2
 
 
-def generate(population):
+def reproduce(population):
     """Applies the evolutionary survival process to the population.
 
     A few select elites with the best reward (fitness) is automatically part of the next generation.
@@ -105,8 +105,8 @@ def generate(population):
         if random_offspring(parent_1[i], parent_2[i]):
             individual_1, individual_2 = create_random_offspring()
         else:
-            rule_1, rule_2 = uniform_crossover_binary(parent_1[i].chromosome, parent_2[i].chromosome)
-            range_1, range_2 = uniform_crossover(parent_1[i].chromosome_ca, parent_2[i].chromosome_ca)
+            rule_1, rule_2 = uniform_crossover_binary(parent_1[i].chromosome_1, parent_2[i].chromosome_1)
+            range_1, range_2 = uniform_crossover(parent_1[i].chromosome_2, parent_2[i].chromosome_2)
 
             mutate(rule_1)
             mutate(rule_2)
@@ -117,11 +117,11 @@ def generate(population):
             individual_1 = Individual()
             individual_2 = Individual()
 
-            individual_1.chromosome = rule_1
-            individual_2.chromosome = rule_2
+            individual_1.chromosome_1 = rule_1
+            individual_2.chromosome_1 = rule_2
 
-            individual_1.chromosome_ca = range_1
-            individual_2.chromosome_ca = range_2
+            individual_1.chromosome_2 = range_1
+            individual_2.chromosome_2 = range_2
 
         new_population.append(individual_1)
         new_population.append(individual_2)

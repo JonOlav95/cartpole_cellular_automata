@@ -1,8 +1,9 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def ca_generate(obs, ca_range):
-    """Arithmetically generates the first row in the CA board
+    """Arithmetically generates the first row in the CA board.
 
     Arguments:
         obs: The observation. Is a list of numbers.
@@ -87,6 +88,14 @@ def map_rule(rule_ids):
 
 
 def iterate(board, rule):
+    """One downwards iteration in the CA.
+
+    Arguments:
+        board: The row in the CA which will be used to generate the next row.
+        rule: The rule which will be applied to the row.
+    Returns:
+        The new row created by the rule.
+    """
     board = np.pad(board, (1, 1), "constant", constant_values=(0, 0))
     new_board = np.zeros_like(board)
 
@@ -133,7 +142,7 @@ def converge_action(initial_board, individual):
     Returns:
         0 or 1.
     """
-    solution = individual.chromosome
+    solution = individual.chromosome_1
 
     mapped = map_rule(solution)
     board_outer = converge_ca(initial_board, mapped)

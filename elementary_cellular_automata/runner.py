@@ -1,4 +1,6 @@
 import gym
+
+from artifical_neural_network.data_handling import store_data
 from elementary_cellular_automata.cellular_automata import ca_generate, converge_action
 from elementary_cellular_automata.genetic_algorithms import *
 from elementary_cellular_automata.helper_funcs import initial_population
@@ -20,7 +22,7 @@ def simulate(env, solution):
     while True:
 
         # Create a cellular automata array from the observation
-        ca_arr = ca_generate(observation, solution.chromosome_ca)
+        ca_arr = ca_generate(observation, solution.chromosome_2)
 
         # Apply the solutions rules to the cellular automata and return an action
         action = converge_action(ca_arr, solution)
@@ -29,7 +31,7 @@ def simulate(env, solution):
         solution_reward += reward
 
         if done:
-            solution.set_reward(int(solution_reward))
+            solution.reward = (int(solution_reward))
             return solution_reward
 
 
@@ -48,10 +50,10 @@ def main():
             reward = simulate(env, solution)
             total_reward += reward
 
-        #store_data(population, generation, total_reward)
+        store_data(total_reward)
 
         # Generate a new population by using genetic algorithms
-        population = generate(population)
+        population = reproduce(population)
 
         print("generation: ", str(generation))
         print("sum rewards: ", str(total_reward))

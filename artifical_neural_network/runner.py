@@ -1,5 +1,7 @@
 import gym
-from artifical_neural_network.genetic_algorithms import survival
+
+from artifical_neural_network.data_handling import store_data
+from artifical_neural_network.genetic_algorithms import reproduce
 from artifical_neural_network.helper_funcs import init_population
 from artifical_neural_network.neural_network import init_neural_network
 
@@ -18,7 +20,7 @@ def simulate(env, sol, render):
     solution_reward = 0
     observation = env.reset()
 
-    neural_network = init_neural_network(sol.chromosome, sol.bias_chromosome)
+    neural_network = init_neural_network(sol.chromosome_1, sol.chromosome_2)
 
     while True:
 
@@ -43,7 +45,7 @@ def main():
     population = init_population()
     render = False
 
-    for generation in range(500000):
+    for generation in range(1000):
         total_reward = 0
 
         for individual in population:
@@ -55,7 +57,8 @@ def main():
         print("generation: " + str(generation))
         print("reward: " + str(total_reward))
         print("len: " + str(len(population)))
-        population = survival(population)
+        #store_data(total_reward)
+        population = reproduce(population)
 
 
 if __name__ == '__main__':

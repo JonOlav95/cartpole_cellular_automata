@@ -1,5 +1,5 @@
 import random
-from artifical_neural_network.individual import Individual
+from individual import Individual
 
 
 def random_neural_network():
@@ -12,12 +12,12 @@ def random_neural_network():
 
     for n in range(17):
         bias = random.uniform(-1, 1)
-        individual.bias_chromosome.append(bias)
+        individual.chromosome_2.append(bias)
 
     for j in range(66):
         weight = random.uniform(-1, 1)
 
-        individual.chromosome.append(weight)
+        individual.chromosome_1.append(weight)
 
     return individual
 

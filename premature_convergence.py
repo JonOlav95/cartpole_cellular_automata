@@ -18,16 +18,16 @@ def judgement_day(population):
 
     total_genes = 0
     for individual in population:
-        total_genes += len(individual.chromosome)
+        total_genes += len(individual.chromosome_1)
 
-        for gene in individual.chromosome:
+        for gene in individual.chromosome_1:
             all_genes.add(gene)
 
     unique_genes = len(set(all_genes))
     ratio = unique_genes / total_genes
     print("Unique Genes Percentage: " + str(round(ratio * 100, 2)))
 
-    if ratio < 0.017:
+    if ratio < 0.015:
         return True
 
     return False
