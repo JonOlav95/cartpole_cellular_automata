@@ -1,6 +1,5 @@
 import gym
-
-from artifical_neural_network.data_handling import store_data
+import sys
 from artifical_neural_network.genetic_algorithms import reproduce
 from artifical_neural_network.helper_funcs import init_population
 from artifical_neural_network.neural_network import init_neural_network
@@ -51,13 +50,9 @@ def main():
         for individual in population:
             total_reward += simulate(environment, individual, render)
 
-        if total_reward > 45000:
-            render = True
-
         print("generation: " + str(generation))
         print("reward: " + str(total_reward))
         print("len: " + str(len(population)))
-        #store_data(total_reward)
         population = reproduce(population)
 
 

@@ -41,7 +41,7 @@ def main():
     env = gym.make("CartPole-v1")
     population = initial_population()
     folder_str = time.strftime("%Y%m%d-%H%M%S")
-    os.makedirs("ca_data/" + folder_str)
+    os.mkdir("ca_data/" + folder_str)
 
     for generation in range(1000):
 
@@ -53,12 +53,11 @@ def main():
             reward = simulate(env, solution)
             total_reward += reward
 
-        store_data(total_reward, folder_str)
+        # Stores data when the population is done.
         store_data_all(population, generation, total_reward, folder_str)
 
         # Generate a new population by using genetic algorithms
         population = reproduce(population)
-
         print("generation: ", str(generation))
         print("sum rewards: ", str(total_reward))
 

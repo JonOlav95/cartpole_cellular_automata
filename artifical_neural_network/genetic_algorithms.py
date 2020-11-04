@@ -1,5 +1,4 @@
 import random
-
 from artifical_neural_network.helper_funcs import random_neural_network
 from crossover import uniform_crossover
 from premature_convergence import judgement_day
@@ -68,8 +67,7 @@ def reproduce(population):
     # Elitism
     new_population = population[:(len(population) - total_remove)]
 
-    #parent_1, parent_2 = tournament_selection(total_remove, population)
-
+    # Selection, may be replaced by tournament_selection method
     parent_1, parent_2 = wheel_selection(total_remove, population)
 
     for i in range(int(total_remove / 2)):

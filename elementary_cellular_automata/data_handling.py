@@ -1,34 +1,11 @@
-import re
-from individual import Individual
-import matplotlib.pyplot as plt
-
-
-
-# Messy functions occasionally used to store data
-
-def tmp_func():
-    individuals = []
-
-    with open("data/52_26447.0.txt") as f:
-        lines = f.readlines()
-
-    for i in range(1, len(lines)):
-        line = re.findall("[-+]?\d*\.\d+|\d+", lines[i])
-        chromosome = list(map(int, line[1:len(line) - 4]))
-        ca_cut = list(map(float, line[len(line) - 4:]))
-
-        individual = Individual()
-        individual.chromosome_1 = chromosome
-        individual.chromosome_2 = ca_cut
-
-        individuals.append(individual)
-
-    #np.random.shuffle(individuals)
-    return individuals
-
 
 def store_data(rew, folder):
+    """Store the rewards for each generation in a text file.
 
+    Args:
+        rew: The reward for the generation.
+        folder: the location of the folder where the text file is
+    """
     filename = "ca_data/" + folder + "/_all_rewards.txt"
 
     with open(filename, mode="a") as file:
@@ -37,6 +14,17 @@ def store_data(rew, folder):
 
 # Function used to store data in textfiles
 def store_data_all(pop, gen, rew, folder):
+    """Store data of the generation in a text file.
+
+    Stores the chromosomes and reward of each individual in the text file.
+
+    Args:
+        pop: The population for this generation.
+        gen: The number of the generation.
+        rew: The reward for the generation.
+        folder: the location of the folder where the text file is
+    """
+    store_data(rew, folder)
     pop = sorted(pop, key=lambda x: x.reward, reverse=True)
 
     filename = "ca_data/" + folder + "/" + str(gen) + "_" + str(rew) + ".txt"
@@ -52,29 +40,3 @@ def store_data_all(pop, gen, rew, folder):
                 file.write(" ")
 
             file.write(str(s.chromosome_2) + "\n")
-
-
-def visualize_board(board, title=None):
-    plt.figure(figsize=(5, 2.5))
-    plt.imshow(board, cmap="Greys")
-    plt.axis("off")
-
-    if title is not None:
-        plt.title(title, fontsize=14)
-
-    plt.show()
-    plt.close()
-
-
-def draw_ca(board_outer, mapped):
-
-    name = ""
-    for n in mapped:
-        name += (n["name"]) + " "
-
-    if sum(board_outer[len(board_outer) - 1]) > len(board_outer[len(board_outer) - 1]) / 2:
-        name += "\n Action 1"
-    else:
-        name += "\n Action 0"
-
-    visualize_board(board_outer, name)
